@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Generator Soal Pesantren</title>
+
+<!-- Font Arab -->
+<link href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
+
+<!-- CSS External -->
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<!-- RESET CONFIRM -->
+<div id="confirmOverlay" class="modal" aria-hidden="true">
+    <div class="edit-box" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+        <h3 id="confirmTitle" class="modal-title">Reset Semua Soal?</h3>
+        <div style="display:flex; gap:10px; margin-top:12px;">
+            <button class="btn cancel" onclick="hideConfirm()">Batal</button>
+            <button class="btn save" style="background:var(--danger);" onclick="doReset()">Ya, Reset</button>
+        </div>
+    </div>
+</div>
+
+<!-- DELETE CONFIRM -->
+<div id="deleteOverlay" class="modal" aria-hidden="true">
+    <div class="edit-box" role="dialog" aria-modal="true">
+        <h3 class="modal-title">Hapus Soal Ini?</h3>
+        <div style="display:flex; gap:10px; margin-top:12px;">
+            <button class="btn cancel" onclick="hideDeleteConfirm()">Batal</button>
+            <button class="btn save" style="background:var(--danger);" onclick="doDelete()">Ya, Hapus</button>
+        </div>
+    </div>
+</div>
+
+<div class="wrap">
+
+    <!-- INPUT -->
+    <div class="card" id="inputCard">
+        <h2 style="margin-top:0;text-align:center">Generator Soal Pesantren</h2>
+
+        <label>Semester</label>
+        <select id="semester" aria-label="Semester">
+            <option value="I">Semester I</option>
+            <option value="II">Semester II</option>
+        </select>
+
+        <label>Tahun Pelajaran</label>
+        <input id="tahun" placeholder="2025/2026" aria-label="Tahun Pelajaran">
+
+        <label>Fan / Mapel (Arab)</label>
+        <input id="fan" placeholder="مثال : التوحيد" style="direction:rtl;text-align:right" aria-label="Fan Mapel">
+
+        <label>Kelas</label>
+        <select id="kelas" aria-label="Kelas">
+            <option>SP (Sekolah Persiapan)</option><option>I (Satu)</option><option>II (Dua)</option>
+            <option>III (Tiga)</option><option>IV (Empat)</option><option>I (Satu Putri)</option><option>II (Dua Putri)</option>
+            <option>III (Tiga Putri)</option><option>IV (Empat Putri)</option>
+        </select>
+
+        <!-- toggle -->
+        <div class="toggleBox" aria-hidden="false">
+            <span id="modeLabel">Arab (RTL)</span>
+            <div class="toggleBtn" onclick="toggleMode()" role="button" aria-pressed="true" tabindex="0">
+                <div class="toggleKnob rtl" id="knob"></div>
+            </div>
+        </div>
+
+        <label>Tulis Soal</label>
+        <textarea id="soalInput" dir="rtl" style="text-align:right" placeholder="Tulis soal disini....." aria-label="Tulis Soal"></textarea>
+
+        <button onclick="addSoal()">Tambah Soal</button>
+    </div>
+
+    <!-- LIST -->
+    <div class="card">
+        <h3 style="margin-top:0">Daftar Soal (<span id="totalCount">0</span>)</h3>
+        <table>
+            <tbody id="tbodySoal" aria-live="polite"></tbody>
+        </table>
+
+        <div style="display:flex; gap:10px;">
+            <button onclick="openPreview()" class="small">Lihat & Cetak</button>
+            <button onclick="openRename()" class="small">Download PDF</button>
+            <button class="red" onclick="showConfirm()">Reset</button>
+        </div>
+    </div>
+
+</div>
+
+<!-- HIDDEN IFRAME -->
+<iframe id="printFrame" style="display:none;"></iframe>
+
+<!-- MODAL EDIT -->
+<div id="editModal" class="modal" aria-hidden="true">
+  <div class="edit-box" role="dialog" aria-modal="true">
+    <h2 class="modal-title">Edit Soal</h2>
+
+    <label class="input-label">Teks Soal</label>
+    <textarea id="editQuestion" class="input-field textarea"></textarea>
+
+    <div class="modal-actions" style="display:flex;justify-content:flex-end;gap:10px;">
+      <button class="btn cancel" onclick="closeEdit()">Batal</button>
+      <button class="btn save" onclick="saveEdit()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL RENAME -->
+<div id="renameModal" class="modal" aria-hidden="true">
+  <div class="edit-box" role="dialog" aria-modal="true">
+    <h2 class="modal-title">Nama File PDF</h2>
+
+    <label class="input-label">Nama File</label>
+    <input id="fileNameInput" class="input-field" />
+
+    <div class="modal-actions" style="display:flex;justify-content:flex-end;">
+      <button class="btn cancel" onclick="closeRename()">Batal</button>
+      <button class="btn save" onclick="confirmDownloadPDF()">Download</button>
+    </div>
+  </div>
+</div>
+
+<!-- html2pdf CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+<!-- LOGO BASE64 -->
+<script src="logos.js"></script>
+<!-- JS External -->
+<script src="main.js"></script>
+</body>
+</html>
